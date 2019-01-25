@@ -7,6 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
+import static examples.aaronhoskins.com.networkandrxjava.model.Constants.ACTUAL_BASE_URL;
 import static examples.aaronhoskins.com.networkandrxjava.model.Constants.BASE_URL;
 import static examples.aaronhoskins.com.networkandrxjava.model.Constants.PATH;
 import static examples.aaronhoskins.com.networkandrxjava.model.Constants.QUERY_RESULTS;
@@ -14,7 +15,7 @@ import static examples.aaronhoskins.com.networkandrxjava.model.Constants.QUERY_R
 public class RetrofitHelper {
     public static Retrofit createRetrofitInstance() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(ACTUAL_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         return retrofit;

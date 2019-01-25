@@ -34,43 +34,34 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         tvDisplay = findViewById(R.id.tvDisplay);
 
+        //HTTPURLCONNECTION
         //HttpUrlConnTask httpUrlConnTask = new HttpUrlConnTask();
         //httpUrlConnTask.execute();
 
-        OkHttpHelper.asyncOkHttpApiCall(BASE_URL);
-        OkHttpHelper.syncOkHttpApiCall(BASE_URL, getApplicationContext());
-        Call<UserResponse> responseCall = RetrofitHelper.getUsers();
+        //OKHTTP3
+        //OkHttpHelper.asyncOkHttpApiCall(BASE_URL);
+        //OkHttpHelper.syncOkHttpApiCall(BASE_URL, getApplicationContext());
 
-        Response<UserResponse> response = null;
+        //retrofit async
+        Call<UserResponse> responseCall = RetrofitHelper.getUsers();
 
             responseCall.enqueue(new Callback<UserResponse>() {
                 @Override
                 public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
 
-                    System.out.println(response.body().getResults().get(0).getEmail());
+                    String urlUsed = call.request().url().toString();
+                    String email =  response.body().getResults().get(0).getEmail();
+
+                    Log.d("TAG", "onResponse: URL = " + urlUsed);
+                    Log.d("TAG", "onResponse: EMAIL = " + email);
                 }
 
                 @Override
                 public void onFailure(Call<UserResponse> call, Throwable t) {
-
+                    Log.d("TAG", "onFailure: REQUEST FAILED");
                 }
             });
-
-
-        String email = response.body().getResults().get(0).getEmail();
-
-        Log.d("TAG", "onCreate: " + email);
-
-
-
-
-
-
-
-
-
-
-
+            
     }
 
     @Override

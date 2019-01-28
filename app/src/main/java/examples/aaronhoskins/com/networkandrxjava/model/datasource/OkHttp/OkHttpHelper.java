@@ -13,6 +13,8 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.http.Url;
 
 public class OkHttpHelper {
 
@@ -65,4 +67,36 @@ public class OkHttpHelper {
         });
         thread.start();
     }
+
+    //build okhttp client with interceptor
+    public static OkHttpClient okhttpWithIntercepterClient() {
+        HttpLoggingInterceptor httpLoggingInterceptor
+                = new HttpLoggingInterceptor();
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        return new OkHttpClient.Builder()
+                .addInterceptor(httpLoggingInterceptor)
+                .build();
+    }
+
+    public static void asyncWithIntercpt(String url) {
+        OkHttpClient okHttpClient = okhttpWithIntercepterClient();
+        final Request request = new Request.Builder()
+                .url(url)
+                .build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.d("TAG", "onResponse: " + response.body().string());
+            }
+        });
+
+    }
+
+
 }

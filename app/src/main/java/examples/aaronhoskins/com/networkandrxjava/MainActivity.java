@@ -13,17 +13,19 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
+import java.util.List;
 
 import examples.aaronhoskins.com.networkandrxjava.events.UserEvent;
 import examples.aaronhoskins.com.networkandrxjava.model.datasource.OkHttp.OkHttpHelper;
-import examples.aaronhoskins.com.networkandrxjava.model.datasource.httpUrlConnection.HttpUrlConnTask;
 import examples.aaronhoskins.com.networkandrxjava.model.datasource.retrofit.RetrofitHelper;
+import examples.aaronhoskins.com.networkandrxjava.model.datasource.rxjava.DatasourceRepo;
 import examples.aaronhoskins.com.networkandrxjava.model.user.UserResponse;
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static examples.aaronhoskins.com.networkandrxjava.model.Constants.BASE_URL;
+import static examples.aaronhoskins.com.networkandrxjava.model.Constants.FULL_EXAMPLE_URL;
 
 public class MainActivity extends AppCompatActivity {
     TextView tvDisplay;
@@ -39,29 +41,56 @@ public class MainActivity extends AppCompatActivity {
         //httpUrlConnTask.execute();
 
         //OKHTTP3
-        //OkHttpHelper.asyncOkHttpApiCall(BASE_URL);
-        //OkHttpHelper.syncOkHttpApiCall(BASE_URL, getApplicationContext());
+        //OkHttpHelper.asyncOkHttpApiCall(FULL_EXAMPLE_URL);
+        //OkHttpHelper.syncOkHttpApiCall(FULL_EXAMPLE_URL, getApplicationContext());
+
+        //OkHttpHelper.asyncWithIntercpt(FULL_EXAMPLE_URL);
 
         //retrofit async
-        Call<UserResponse> responseCall = RetrofitHelper.getUsers();
+//        Call<UserResponse> responseCall = RetrofitHelper.getUsers();
+//
+//            responseCall.enqueue(new Callback<UserResponse>() {
+//                @Override
+//                public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+//
+//
+//                    String urlUsed = call.request().url().toString(); //get url of requested call
+//                    String email =  response.body().getResults().get(0).getEmail();//results from call
+//
+//                    Log.d("TAG", "onResponse: URL = " + urlUsed);
+//                    Log.d("TAG", "onResponse: EMAIL = " + email);
+//                }
+//
+//                @Override
+//                public void onFailure(Call<UserResponse> call, Throwable t) {
+//                    Log.d("TAG", "onFailure: REQUEST FAILED " + t.getCause().getMessage());
+//                }
+//            });
+//            //Sync retrofit call
+//            Thread thread = new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Call<UserResponse> responseCall = RetrofitHelper.getUsers();
+//                    try {
+//                        Response<UserResponse> userResponseResponse = responseCall.execute();
+//                        String userResponseEmail = userResponseResponse.body().getResults().get(1).getEmail();
+//                        Log.d("TAG", "run: " + userResponseEmail);
+//
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            });
+//            thread.start();
 
-            responseCall.enqueue(new Callback<UserResponse>() {
-                @Override
-                public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+        DatasourceRepo datasourceRepo = new DatasourceRepo();
+        datasourceRepo.getUserResponse(new examples.aaronhoskins.com.networkandrxjava.model.datasource.rxjava.Callback() {
+            @Override
+            public void onSuccess(UserResponse userResponse) {
+                Log.d("TAG_RX", "onSuccess: " + userResponse.getResults().get(0).getEmail());
+            }
+        });
 
-                    String urlUsed = call.request().url().toString();
-                    String email =  response.body().getResults().get(0).getEmail();
-
-                    Log.d("TAG", "onResponse: URL = " + urlUsed);
-                    Log.d("TAG", "onResponse: EMAIL = " + email);
-                }
-
-                @Override
-                public void onFailure(Call<UserResponse> call, Throwable t) {
-                    Log.d("TAG", "onFailure: REQUEST FAILED");
-                }
-            });
-            
     }
 
     @Override

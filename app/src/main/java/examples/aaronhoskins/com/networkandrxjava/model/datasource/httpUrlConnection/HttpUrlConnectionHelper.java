@@ -1,7 +1,5 @@
 package examples.aaronhoskins.com.networkandrxjava.model.datasource.httpUrlConnection;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
@@ -9,13 +7,12 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import examples.aaronhoskins.com.networkandrxjava.events.UserEvent;
 import examples.aaronhoskins.com.networkandrxjava.model.user.UserResponse;
 
-import static examples.aaronhoskins.com.networkandrxjava.model.Constants.BASE_URL;
+import static examples.aaronhoskins.com.networkandrxjava.model.Constants.FULL_EXAMPLE_URL;
 
 public class HttpUrlConnectionHelper {
 
@@ -25,7 +22,7 @@ public class HttpUrlConnectionHelper {
         String jsonResponse = "";
 
         try {
-            apiURL = new URL(BASE_URL);
+            apiURL = new URL(FULL_EXAMPLE_URL);
             httpURLConnection = (HttpURLConnection)apiURL.openConnection();
 
             InputStream inputStream = httpURLConnection.getInputStream();
